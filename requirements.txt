@@ -1,0 +1,4 @@
+panda
+numpy
+google_play_scraper
+langdetect
