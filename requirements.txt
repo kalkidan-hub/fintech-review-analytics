@@ -2,3 +2,10 @@ panda
 numpy
 google_play_scraper
 langdetect
+nltk
+transformers
+matplotlib
+pytorch
+seaborn
+scikit-learn
+spacy
