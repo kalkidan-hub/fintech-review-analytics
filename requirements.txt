@@ -5,7 +5,7 @@ langdetect
 nltk
 transformers
 matplotlib
-pytorch
 seaborn
 scikit-learn
 spacy
+torch --index-url https://download.pytorch.org/whl/cpu
