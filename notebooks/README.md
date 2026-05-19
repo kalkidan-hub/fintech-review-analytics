@@ -83,4 +83,36 @@ Planned pipeline to add sentiment analysis to the cleaned reviews:
 7. Compute & cost
 	- Baselines run locally; transformer fine-tuning benefits from GPU. Estimate compute before training large models.
 
+## Sentiment & Thematic Analysis — Work completed
+
+Summary of what was executed in this project so far (notebooks: `sentiment_analysis.ipynb`, `thematic_analysis.ipynb`):
+
+- Preprocessing: implemented a small NLP pipeline that cleans text, tokenizes, removes stopwords and lemmatizes using NLTK. Notebook ensures required NLTK data are available (`punkt_tab`, `wordnet`, `stopwords`).
+
+- Sentiment labeling: used HuggingFace `transformers` pipeline with `distilbert-base-uncased-finetuned-sst-2-english` to produce `sentiment_label` and `sentiment_score` for each review (stored in `banks_sentiment.csv`). VADER/TextBlob are available as quick baselines in the notebook for comparison.
+
+- Thematic extraction:
+	- TF‑IDF n‑grams (unigrams + bigrams) to surface high‑importance phrases.
+	- spaCy noun‑chunk extraction to capture readable phrase candidates (requires the `en_core_web_sm` model).
+	- Semantic phrase clustering: used `sentence-transformers` (`all-MiniLM-L6-v2`) to embed candidate phrases and KMeans to group related phrases into 3–5 clusters per bank. Representative phrase per cluster is produced.
+	- Topic modeling: added LDA (sklearn) to discover latent topics and attached `lda_topic` and `lda_topic_confidence` to the dataframe.
+
+- Outputs & visualization:
+	- Per‑bank theme clusters assigned to reviews as `theme_cluster` and readable `theme_label`.
+	- Wordclouds generated per bank+cluster (saved to `outputs/wordclouds/`).
+	- Aggregation tables computed: `bank_summary`, `rating_summary`, `bank_rating_summary` (notebook cells show examples of plotting these summaries).
+
+- Saved artifacts:
+	- `data/processed/banks_sentiment.csv` — intermediate sentiment-labeled data.
+	- `data/processed/banks_sentiment_with_themes.csv` — final dataset with theme labels and LDA topics.
+
+How to reproduce
+- Make sure the project virtual environment is activated and dependencies installed (see `requirements.txt`). If you need CPU-only PyTorch, add the extra index and `torch` as discussed in the project root.
+- Run `notebooks/sentiment_analysis.ipynb` then `notebooks/thematic_analysis.ipynb` in order.
+
+Notes
+- Some steps (transformer inference, sentence‑transformers encoding) may be slow on CPU; consider using a GPU environment if available.
+- Thematic cluster names are initially auto-generated from representative phrases — review and rename them to human-friendly names if producing a final report.
+
+
 
